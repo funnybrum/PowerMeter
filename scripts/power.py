@@ -12,7 +12,7 @@ from lib.quicklock import lock
 
 
 class Tracker(object):
-    def __init__(self, value_key, metric_key, tags, track_min=True, track_max=True, track_avg=True, track_last=True):
+    def __init__(self, value_key, metric_key, tags, track_min=True, track_max=True, track_avg=True, track_last=True, track_point_count=False):
         self.value_key = value_key
         self.metric_key = metric_key
         self.min = 1000000
@@ -23,6 +23,7 @@ class Tracker(object):
         self.track_max = track_max
         self.track_avg = track_avg
         self.track_last = track_last
+        self.track_point_count = track_point_count
         self.tags = tags
 
     def reset(self):
@@ -48,11 +49,16 @@ class Tracker(object):
             data_lines.append(to_data_line(self.metric_key + ".avg", round(sum(self.avg) / len(self.avg), 1), self.tags))
         if self.track_last:
             data_lines.append(to_data_line(self.metric_key, self.last, self.tags))
+        if self.track_point_count:
+            data_lines.append(to_data_line(self.metric_key + ".data_points", len(self.avg), self.tags))
 
         return data_lines
 
     def get_points_count(self):
         return len(self.avg)
+
+    def get_points_count_data_line(self):
+        return to_data_line("point_count", self.get_points_count(), self.tags)
 
 
 TRACKERS = [
@@ -60,7 +66,7 @@ TRACKERS = [
     Tracker('pconsumecounter', 'power.total', {"source": "grid", "src": "sma"}, False, False, False, True),
     Tracker('psupply', 'power.flow', {"source": "pv", "src": "sma"}, True, True, True, False),
     Tracker('psupplycounter', 'power.total', {"source": "pv", "src": "sma"}, False, False, False, True),
-    Tracker('u1', 'voltage', {"src": "sma"}, True, True, True, False)
+    Tracker('u1', 'voltage', {"src": "sma"}, True, True, True, False, True)
 ]
 
 # unit definitions with scaling

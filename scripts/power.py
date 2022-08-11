@@ -1,3 +1,6 @@
+import os
+os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/power.yaml'
+
 import binascii
 import datetime
 import struct
@@ -5,7 +8,7 @@ import socket
 
 from lib import log
 from lib.telemetry import send_data_lines, to_data_line
-# from lib.quicklock import lock
+from lib.quicklock import lock
 
 
 class Tracker(object):
@@ -47,6 +50,10 @@ class Tracker(object):
             data_lines.append(to_data_line(self.metric_key, self.last, self.tags))
 
         return data_lines
+
+    def get_points_count(self):
+        return len(self.avg)
+
 
 TRACKERS = [
     Tracker('pconsume', 'power.flow', {"source": "grid", "src": "sma"}, True, True, True, False),
@@ -255,7 +262,6 @@ def update(sock):
 
     if len(data_dict) == 0:
         return
-    print(data_dict['pconsume'])
 
     for tracker in TRACKERS:
         tracker.track(data_dict)
@@ -263,6 +269,7 @@ def update(sock):
 
 def send():
     data_lines = []
+    log("Collected %d data points. Sending telemetry." % TRACKERS[0].get_points_count())
     for tracker in TRACKERS:
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()
@@ -273,10 +280,10 @@ def send():
 
 
 if __name__ == "__main__":
-    # try:
-    #     lock()
-    # except RuntimeError:
-    #     exit(0)
+    try:
+        lock()
+    except RuntimeError:
+        exit(0)
     log("Starting SunnyManager data collector")
     sock = get_socket()
     while True:

@@ -1,0 +1,11 @@
+email:
+    to: SET_TO_EMAIL_HERE
+    from: SET_FROM_EMAIL_HERE
+smtp:
+    server: smtp.gmail.com
+    port: 587
+    user: GMAIL_ACCOUNT_USERNAME
+    password: GMAIL_ACCOUNT_PASSWORD
+    sender: Some code name
+    recipient: SET_TO_EMAIL_HERE
+tmp_folder: /tmp

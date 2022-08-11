@@ -1,0 +1,3 @@
+extend: base.yaml
+
+identifier: power_monitor

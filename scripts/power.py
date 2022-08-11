@@ -5,7 +5,7 @@ import socket
 
 from lib import log
 from lib.telemetry import send_data_lines, to_data_line
-# from lib.quicklock import lock
+from lib.quicklock import lock
 
 
 class Tracker(object):
@@ -273,10 +273,10 @@ def send():
 
 
 if __name__ == "__main__":
-    # try:
-    #     lock()
-    # except RuntimeError:
-    #     exit(0)
+    try:
+        lock()
+    except RuntimeError:
+        exit(0)
     log("Starting SunnyManager data collector")
     sock = get_socket()
     while True:

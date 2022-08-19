@@ -7,65 +7,17 @@ import struct
 import socket
 
 from lib import log
-from lib.telemetry import send_data_lines, to_data_line
+from lib.telemetry import send_data_lines
 from lib.quicklock import lock
 
-
-class Tracker(object):
-    def __init__(self, value_key, metric_key, tags, track_min=True, track_max=True, track_avg=True, track_last=True, track_point_count=False):
-        self.value_key = value_key
-        self.metric_key = metric_key
-        self.min = 1000000
-        self.max = 0
-        self.last = 0
-        self.avg = []
-        self.track_min = track_min
-        self.track_max = track_max
-        self.track_avg = track_avg
-        self.track_last = track_last
-        self.track_point_count = track_point_count
-        self.tags = tags
-
-    def reset(self):
-        self.min = 1000000
-        self.max = 0
-        self.last = 0
-        self.avg = []
-
-    def track(self, data_dict):
-        self.last = data_dict[self.value_key]
-        self.max = max(self.max, self.last)
-        self.min = min(self.min, self.last)
-        self.avg.append(self.last)
-
-    def get_data_lines(self):
-        data_lines = []
-
-        if self.track_min:
-            data_lines.append(to_data_line(self.metric_key + ".min", self.min, self.tags))
-        if self.track_max:
-            data_lines.append(to_data_line(self.metric_key + ".max", self.max, self.tags))
-        if self.track_avg:
-            data_lines.append(to_data_line(self.metric_key + ".avg", round(sum(self.avg) / len(self.avg), 1), self.tags))
-        if self.track_last:
-            data_lines.append(to_data_line(self.metric_key, self.last, self.tags))
-        if self.track_point_count:
-            data_lines.append(to_data_line(self.metric_key + ".data_points", len(self.avg), self.tags))
-
-        return data_lines
-
-    def get_points_count(self):
-        return len(self.avg)
-
-    def get_points_count_data_line(self):
-        return to_data_line("point_count", self.get_points_count(), self.tags)
+from common import Tracker
 
 
 TRACKERS = [
-    Tracker('pconsume', 'power.flow', {"source": "grid", "src": "sma"}, True, True, True, False),
-    Tracker('pconsumecounter', 'power.total', {"source": "grid", "src": "sma"}, False, False, False, True),
-    Tracker('psupply', 'power.flow', {"source": "pv", "src": "sma"}, True, True, True, False),
-    Tracker('psupplycounter', 'power.total', {"source": "pv", "src": "sma"}, False, False, False, True),
+    Tracker('pconsume', 'grid.consume.flow', {"source": "sunny_home_manager", "src": "sma"}, True, True, True, False),
+    Tracker('pconsumecounter', 'grid.consume.total', {"source": "sunny_home_manager", "src": "sma"}, False, False, False, True),
+    Tracker('psupply', 'grid.supply.flow', {"source": "grid", "sunny_home_manager": "sma"}, True, True, True, False),
+    Tracker('psupplycounter', 'grid.supply.total', {"source": "sunny_home_manager", "src": "sma"}, False, False, False, True),
     Tracker('u1', 'voltage', {"src": "sma"}, True, True, True, False, True)
 ]
 
@@ -290,10 +242,10 @@ if __name__ == "__main__":
         lock()
     except RuntimeError:
         exit(0)
-    log("Starting SunnyManager data collector")
+    log("Starting SunnyBoy data collector")
     sock = get_socket()
     while True:
-        current_minute = datetime.datetime.now().minute
-        while datetime.datetime.now().minute == current_minute:
+        current_minute = datetime.datetime.now().second
+        while datetime.datetime.now().second == current_minute:
             update(sock)
         send()

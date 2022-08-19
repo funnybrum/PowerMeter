@@ -14,10 +14,10 @@ from common import Tracker
 
 
 TRACKERS = [
-    Tracker('pconsume', 'grid.consume.flow', {"source": "sunny_home_manager", "src": "sma"}, True, True, True, False),
-    Tracker('pconsumecounter', 'grid.consume.total', {"source": "sunny_home_manager", "src": "sma"}, False, False, False, True),
-    Tracker('psupply', 'grid.supply.flow', {"source": "grid", "sunny_home_manager": "sma"}, True, True, True, False),
-    Tracker('psupplycounter', 'grid.supply.total', {"source": "sunny_home_manager", "src": "sma"}, False, False, False, True),
+    Tracker('pconsume', 'grid.consume.flow', {"src": "sma"}, True, True, True, False),
+    Tracker('pconsumecounter', 'grid.consume.total', {"src": "sma"}, False, False, False, True),
+    Tracker('psupply', 'grid.supply.flow', {"src": "sma"}, True, True, True, False),
+    Tracker('psupplycounter', 'grid.supply.total', {"src": "sma"}, False, False, False, True),
     Tracker('u1', 'voltage', {"src": "sma"}, True, True, True, False, True)
 ]
 

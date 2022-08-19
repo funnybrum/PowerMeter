@@ -19,6 +19,10 @@ TRACKERS = [
 ]
 
 
+def extract(props, key, default=0):
+    return props[key]["1"][0]["val"] if props[key]["1"][0]["val"] else 0
+
+
 def update():
     if datetime.datetime.now().second % 5 != 0:
         return
@@ -28,8 +32,8 @@ def update():
     data_root = list(response_data["result"].keys())[0]
     props = response_data["result"][data_root]
     data_dict = {
-        "yield": props["6100_40263F00"]["1"][0]["val"],
-        "yield_counter": props["6400_00260100"]["1"][0]["val"]
+        "yield": extract(props, "6100_40263F00"),
+        "yield_counter": extract(props, "6400_00260100")
     }
 
     for tracker in TRACKERS:

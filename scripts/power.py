@@ -227,7 +227,6 @@ def update(sock):
 
 def send():
     data_lines = []
-    log("Collected %d data points. Sending telemetry." % TRACKERS[0].get_points_count())
     for tracker in TRACKERS:
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()
@@ -245,7 +244,7 @@ if __name__ == "__main__":
     log("Starting SunnyBoy data collector")
     sock = get_socket()
     while True:
-        current_minute = datetime.datetime.now().second
-        while datetime.datetime.now().second == current_minute:
+        current_minute = datetime.datetime.now().minute
+        while datetime.datetime.now().minute == current_minute:
             update(sock)
         send()

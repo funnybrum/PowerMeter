@@ -38,7 +38,6 @@ def update():
 
 def send():
     data_lines = []
-    log("Collected %d data points. Sending telemetry." % TRACKERS[0].get_points_count())
     for tracker in TRACKERS:
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()

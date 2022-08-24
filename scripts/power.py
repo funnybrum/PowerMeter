@@ -241,7 +241,7 @@ if __name__ == "__main__":
         lock()
     except RuntimeError:
         exit(0)
-    log("Starting SunnyBoy data collector")
+    log("Starting SMA HomeManager 2.0 data collector")
     sock = get_socket()
     while True:
         current_minute = datetime.datetime.now().minute

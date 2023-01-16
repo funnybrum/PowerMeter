@@ -1,4 +1,4 @@
 extend: base.yaml
 
-identifier: inverter1
+identifier: pv_inverter
 address: 192.168.1.211

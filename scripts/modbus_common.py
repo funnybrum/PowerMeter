@@ -28,9 +28,12 @@ class ModbusDataCollector():
             if type.startswith("64"):
                 count = 4
             regs_l = self.client.read_holding_registers(address=address, count=count, slave=self.slave)
+            print(address, regs_l.registers)
             decoder = BinaryPayloadDecoder.fromRegisters(regs_l.registers, byteorder=Endian.Big, wordorder=Endian.Big)
             dec_method = getattr(decoder, "decode_%s" % type)
             value = dec_method()
+            if value == 0x80000000:
+                value = 0
             result[key] = value
 
         return result

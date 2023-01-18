@@ -1,6 +1,10 @@
 # import os
 # os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/pv_inverter.yaml'
 
+"""
+Based on MODBUS-HTML_SB30-50-1AV-40_V10
+"""
+
 import time
 import datetime
 
@@ -9,17 +13,29 @@ from lib.quicklock import lock
 from lib.telemetry import send_data_lines
 
 from common import Tracker
-from modbus_common import ModbusDataCollector
+from modbus_common import ModbusDataCollector, RegisterType
 
 
 TRACKERS = [
     Tracker('yield', 'inverter.supply.flow', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
-    Tracker('yield.total', 'inverter.supply.total', {"source": "sunny_boy", "src": "sma"}, False, False, False, True, False)
+    Tracker('yield.total', 'inverter.supply.total', {"source": "sunny_boy", "src": "sma"}, False, False, False, True, False),
+    Tracker('DCV1', 'inverter.dc.voltage.mppt1', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
+    Tracker('DCA1', 'inverter.dc.current.mppt1', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
+    Tracker('DCW1', 'inverter.dc.power.mppt1', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
+    Tracker('DCV2', 'inverter.dc.voltage.mppt2', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
+    Tracker('DCA2', 'inverter.dc.current.mppt2', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
+    Tracker('DCW2', 'inverter.dc.power.mppt2', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
 ]
 
 MODBUS_DATA_COLLECTOR = ModbusDataCollector([
-    (30775, '32bit_uint', 'yield'),
-    (30513, '64bit_uint', 'yield.total'),
+    (30513, RegisterType.U64, 'yield.total'),
+    (30769, RegisterType.S32_F3, "DCA1"),
+    (30771, RegisterType.S32_F2, "DCV1"),
+    (30773, RegisterType.S32, "DCW1"),
+    (30775, RegisterType.S32, 'yield'),
+    (30957, RegisterType.S32_F3, "DCA2"),
+    (30959, RegisterType.S32_F2, "DCV2"),
+    (30961, RegisterType.S32, "DCW2"),
 ])
 
 

@@ -1,6 +1,10 @@
 # import os
 # os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/bat_inverter.yaml'
 
+"""
+Based on MODBUS-HTML_SI44M-80H-13_32009R_V10
+"""
+
 import time
 import datetime
 
@@ -9,7 +13,7 @@ from lib.quicklock import lock
 from lib.telemetry import send_data_lines
 
 from common import Tracker
-from modbus_common import ModbusDataCollector
+from modbus_common import ModbusDataCollector, RegisterType
 
 
 TRACKERS = [
@@ -17,15 +21,16 @@ TRACKERS = [
     Tracker('charge', 'inverter.battery.consume', {"source": "sunny_island", "src": "sma"}, True, True, True, False, True),
     Tracker('discharge.total', 'inverter.battery.supply.total', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
     Tracker('charge.total', 'inverter.battery.consume.total', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
-    Tracker('SOC', 'inverter.battery.SOC', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
+    Tracker('bat.SOC', 'inverter.battery.SOC', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
 ]
 
 MODBUS_DATA_COLLECTOR = ModbusDataCollector([
-    (30845, '32bit_uint', 'SOC'),
-    (31393, '32bit_uint', 'charge'),
-    (31395, '32bit_uint', 'discharge'),
-    (31397, '64bit_uint', 'charge.total'),
-    (31401, '64bit_uint', 'discharge.total'),
+    (30845, RegisterType.U32, 'bat.SOC'),
+    (30849, RegisterType.S32_F1, 'bat.temp'),
+    (31393, RegisterType.U32, 'charge'),
+    (31395, RegisterType.U32, 'discharge'),
+    (31397, RegisterType.U64, 'charge.total'),
+    (31401, RegisterType.U64, 'discharge.total'),
 ])
 
 

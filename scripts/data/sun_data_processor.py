@@ -1,11 +1,21 @@
-IN_FILE_NAME = "Timeseries_42.605_23.482_SA2_3kWp_crystSi_14_17deg_7deg_2020_2020.csv"
+IN_FILE_NAME_S = "Timeseries_42.605_23.482_SA2_3kWp_crystSi_14_17deg_7deg_2020_2020.csv"
+IN_FILE_NAME_N = "Timeseries_42.605_23.482_SA2_3kWp_crystSi_14_17deg_-173deg_2005_2020.csv"
 FIRST_LINE = 10  # zero-based line index that contains the headers
 LOOK_AROUND_DAYS = 7  # 14 for daily drops calculator
-OUTPUT_FILE = "avg_power.csv"
+OUTPUT_FILE_S = "avg_power.csv"
+OUTPUT_FILE_N = "avg_power_n.csv"
 
 import csv
 
 from scipy.interpolate import CubicSpline, interp1d
+
+if False:
+    IN_FILE_NAME = IN_FILE_NAME_S
+    OUTPUT_FILE = OUTPUT_FILE_S
+else:
+    IN_FILE_NAME = IN_FILE_NAME_N
+    OUTPUT_FILE = OUTPUT_FILE_N
+
 
 
 output_data = []

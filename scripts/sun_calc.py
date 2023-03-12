@@ -1,5 +1,5 @@
-import os
-os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/sun_calc.yaml'
+# import os
+# os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/sun_calc.yaml'
 
 import csv
 import datetime

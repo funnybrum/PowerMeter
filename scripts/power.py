@@ -1,5 +1,5 @@
-import os
-os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/power.yaml'
+# import os
+# os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/power.yaml'
 
 import binascii
 import datetime

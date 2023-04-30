@@ -1,5 +1,5 @@
-import os
-os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/postprocessor.yaml'
+# import os
+# os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/postprocessor.yaml'
 
 """
 Based on MODBUS-HTML_SB30-50-1AV-40_V10

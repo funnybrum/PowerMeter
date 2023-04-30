@@ -218,15 +218,11 @@ def get_socket():
 def update(sock):
     data_dict = decode_speedwire(sock.recv(608))
 
-
     if data_dict.get("serial", None) != 3012881242:
         return
 
     if len(data_dict) == 0:
         return
-
-    print(data_dict)
-
 
     for tracker in TRACKERS:
         try:

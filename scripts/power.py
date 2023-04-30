@@ -15,9 +15,9 @@ from common import Tracker
 
 TRACKERS = [
     Tracker('pconsume', 'grid.consume.flow', {"src": "sma"}, True, True, True, False),
-    Tracker('pconsumecounter', 'grid.consume.total', {"src": "sma"}, False, False, False, True),
+    Tracker('pconsumecounter', 'grid.consume.total', {"src": "sma"}, False, False, False, False),
     Tracker('psupply', 'grid.supply.flow', {"src": "sma"}, True, True, True, False),
-    Tracker('psupplycounter', 'grid.supply.total', {"src": "sma"}, False, False, False, True),
+    Tracker('psupplycounter', 'grid.supply.total', {"src": "sma"}, False, False, False, False),
     Tracker('u1', 'voltage', {"src": "sma"}, True, True, True, False, True)
 ]
 
@@ -234,13 +234,12 @@ def update(sock):
 def send():
     data_lines = []
     for tracker in TRACKERS:
-        print(tracker.metric_key)
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()
 
-    # send_data_lines("power", data_lines)
-    for data_line in data_lines:
-        print(data_line)
+    send_data_lines("power", data_lines)
+    # for data_line in data_lines:
+    #     print(data_line)
 
 
 if __name__ == "__main__":

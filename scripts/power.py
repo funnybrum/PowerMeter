@@ -15,9 +15,9 @@ from common import Tracker
 
 TRACKERS = [
     Tracker('pconsume', 'grid.consume.flow', {"src": "sma"}, True, True, True, False),
-    Tracker('pconsumecounter', 'grid.consume.total', {"src": "sma"}, False, False, False, False),
+    Tracker('pconsumecounter', 'grid.consume.total', {"src": "sma"}, False, False, False, True),
     Tracker('psupply', 'grid.supply.flow', {"src": "sma"}, True, True, True, False),
-    Tracker('psupplycounter', 'grid.supply.total', {"src": "sma"}, False, False, False, False),
+    Tracker('psupplycounter', 'grid.supply.total', {"src": "sma"}, False, False, False, True),
     Tracker('u1', 'voltage', {"src": "sma"}, True, True, True, False, True)
 ]
 

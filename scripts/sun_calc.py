@@ -69,8 +69,8 @@ def calculate(month, day, hour, minute):
     min_sun_power = DAILY_DROPS[day_of_year-1] * 0.01 * max_sun_power
     send_data("power",
               {
-                  "solar.expected2.max": min(max_sun_power, 3680),
-                  "solar.expected2.min": min_sun_power,
+                  "solar.expected.max": min(max_sun_power, 3680),
+                  "solar.expected.min": min_sun_power,
                   "solar.expected_non_clipped.max": max_sun_power,
               },
               {

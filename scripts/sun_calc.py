@@ -28,8 +28,8 @@ def prepare_data():
         for row, row_n in zip(reader, reader_n):
             assert row['time'] == row_n['time']
             DATES.append(row['time'])
-            MIN_POWER.append(row['min_power'] + row_n['min_power'])
-            MAX_POWER.append(row['max_power'] + row_n['max_power'])
+            MIN_POWER.append(int(row['min_power']) + int(row_n['min_power']))
+            MAX_POWER.append(int(row['max_power']) + int(row_n['max_power']))
 
 
 def count_zeroes_at_start(array):
@@ -57,7 +57,7 @@ def calculate(month, day, hour, minute):
     powers = powers[drop_from_start:-drop_from_end if drop_from_end > 0 else None]
     times = times[drop_from_start:-drop_from_end if drop_from_end > 0 else None]
 
-    if len(INTERPOLATION_POINTS_AROUND) > 3:
+    if len(powers) > 3:
         # Go with the spline
         cs = CubicSpline(times, powers)
 
@@ -67,11 +67,11 @@ def calculate(month, day, hour, minute):
 
     day_of_year = datetime.datetime.utcnow().timetuple().tm_yday
     min_sun_power = DAILY_DROPS[day_of_year-1] * 0.01 * max_sun_power
-
     send_data("power",
               {
-                  "solar.expected.max": max_sun_power,
-                  "solar.expected.min": min_sun_power
+                  "solar.expected2.max": min(max_sun_power, 3680),
+                  "solar.expected2.min": min_sun_power,
+                  "solar.expected_non_clipped.max": max_sun_power,
               },
               {
                   "src": "master_mind"
@@ -85,7 +85,6 @@ if __name__ == "__main__":
         exit(0)
     log("Starting available power data calculator")
     prepare_data()
-    exit(1)
     while True:
         current_minute = datetime.datetime.now().minute
         now = datetime.datetime.utcnow()

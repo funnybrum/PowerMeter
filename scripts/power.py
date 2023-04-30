@@ -1,5 +1,5 @@
-# import os
-# os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/power.yaml'
+import os
+os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/power.yaml'
 
 import binascii
 import datetime
@@ -218,22 +218,33 @@ def get_socket():
 def update(sock):
     data_dict = decode_speedwire(sock.recv(608))
 
+
+    if data_dict.get("serial", None) != 3012881242:
+        return
+
     if len(data_dict) == 0:
         return
 
+    print(data_dict)
+
+
     for tracker in TRACKERS:
-        tracker.track(data_dict)
+        try:
+            tracker.track(data_dict)
+        except Exception as e:
+            print(repr(e), data_dict)
 
 
 def send():
     data_lines = []
     for tracker in TRACKERS:
+        print(tracker.metric_key)
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()
 
-    send_data_lines("power", data_lines)
-    # for data_line in data_lines:
-    #     print(data_line)
+    # send_data_lines("power", data_lines)
+    for data_line in data_lines:
+        print(data_line)
 
 
 if __name__ == "__main__":

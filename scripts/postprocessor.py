@@ -93,10 +93,10 @@ def backfill_total(from_date, window="30m"):
     # Round the from_ts to be at the minute start. Without this some data points emitted at round minute will be lost.
     to_ts = round(from_date.timestamp())
     to_ts = to_ts - (to_ts % 60)
-    pv_supply = query_series(to_ts, "inverter.supply.total", window, default="previous")
-    bat_consume = query_series(to_ts, "inverter.battery.consume.total", window, default="previous")
-    bat_supply = query_series(to_ts, "inverter.battery.supply.total", window, default="previous")
-    grid_supply_total = query_series(to_ts, "grid.supply.total", window, default="previous")
+    pv_supply = query_series(to_ts, "inverter.supply.total", window)
+    bat_consume = query_series(to_ts, "inverter.battery.consume.total", window)
+    bat_supply = query_series(to_ts, "inverter.battery.supply.total", window)
+    grid_supply_total = query_series(to_ts, "grid.supply.total", window)
     own_consume = query_series(to_ts, OWN_TOTAL_CONSUMPTION_KEY, window)
 
     keyset = set()
@@ -115,9 +115,10 @@ def backfill_total(from_date, window="30m"):
         bat_s = bat_supply.get(key, 0)
         bat_c = bat_consume.get(key, 0)
         grid_s = grid_supply_total.get(key, 0)
-        if bat_s is None and bat_s is None:
-            bat_s = 0
-            bat_c = 0
+        # only for backfill
+        # if bat_s is None and bat_s is None:
+        #     bat_s = 0
+        #     bat_c = 0
 
         if pv_s is None or grid_s is None or bat_s is None or bat_c is None:
             # Missing data detected. No backfill possible for counters
@@ -149,6 +150,7 @@ if __name__ == "__main__":
 
 #backfill
 if __name__ == "__main__-backfill":
+    # Set query_data to end on , default="previous")
     for_date = datetime(2023, 4, 1)
     end_date = datetime(2023, 5, 5)
     while for_date < end_date:

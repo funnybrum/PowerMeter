@@ -23,4 +23,4 @@ ADD scripts /scripts
 RUN ln -snf /usr/share/zoneinfo/Europe/Sofia /etc/localtime && echo Europe/Sofia > /etc/timezone
 
 # Run the command on container startup
-CMD rm /tmp/*.lock;cron && tail -f /var/log/cron.log
+CMD rm /tmp/*.lock -f;cron && tail -f /var/log/cron.log

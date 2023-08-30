@@ -46,7 +46,6 @@ def update():
         return
 
     data_dict = MODBUS_DATA_COLLECTOR.read()
-    print(data_dict)
     for tracker in TRACKERS:
         tracker.track(data_dict)
 

@@ -57,7 +57,7 @@ def send():
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()
 
-    # send_data_lines("power", data_lines)
+    send_data_lines("power", data_lines)
     # print("=" * 40)
     # for data_line in data_lines:
     #     print(data_line)

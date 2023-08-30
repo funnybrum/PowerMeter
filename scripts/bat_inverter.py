@@ -1,5 +1,6 @@
-# import os
-# os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/bat_inverter.yaml'
+import os
+if 'APP_CONFIG' not in os.environ:
+    os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/bat_inverter.yaml'
 
 """
 Based on MODBUS-HTML_SI44M-80H-13_32009R_V10
@@ -22,6 +23,7 @@ TRACKERS = [
     Tracker('discharge.total', 'inverter.battery.supply.total', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
     Tracker('charge.total', 'inverter.battery.consume.total', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
     Tracker('bat.SOC', 'inverter.battery.SOC', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
+    Tracker('event.code', 'inverter.battery.status', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
 ]
 
 MODBUS_DATA_COLLECTOR = ModbusDataCollector([
@@ -31,6 +33,7 @@ MODBUS_DATA_COLLECTOR = ModbusDataCollector([
     (31395, RegisterType.U32, 'discharge'),
     (31397, RegisterType.U64, 'charge.total'),
     (31401, RegisterType.U64, 'discharge.total'),
+    (30247, RegisterType.U32, 'event.code'),
 ])
 
 

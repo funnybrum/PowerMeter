@@ -25,6 +25,7 @@ TRACKERS = [
     Tracker('DCV2', 'inverter.dc.voltage.mppt2', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
     Tracker('DCA2', 'inverter.dc.current.mppt2', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
     Tracker('DCW2', 'inverter.dc.power.mppt2', {"source": "sunny_boy", "src": "sma"}, True, True, True, False, True),
+    Tracker('event.code', 'inverter.pv.status', {"source": "sunny_island", "src": "sma"}, False, False, False, True, False),
 ]
 
 MODBUS_DATA_COLLECTOR = ModbusDataCollector([
@@ -36,6 +37,7 @@ MODBUS_DATA_COLLECTOR = ModbusDataCollector([
     (30957, RegisterType.S32_F3, "DCA2"),
     (30959, RegisterType.S32_F2, "DCV2"),
     (30961, RegisterType.S32, "DCW2"),
+    (30247, RegisterType.U32, 'event.code'),
 ])
 
 
@@ -44,6 +46,7 @@ def update():
         return
 
     data_dict = MODBUS_DATA_COLLECTOR.read()
+    print(data_dict)
     for tracker in TRACKERS:
         tracker.track(data_dict)
 
@@ -54,7 +57,7 @@ def send():
         data_lines.extend(tracker.get_data_lines())
         tracker.reset()
 
-    send_data_lines("power", data_lines)
+    # send_data_lines("power", data_lines)
     # print("=" * 40)
     # for data_line in data_lines:
     #     print(data_line)

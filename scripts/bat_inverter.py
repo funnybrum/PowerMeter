@@ -13,8 +13,8 @@ from lib import log, config
 from lib.quicklock import lock
 from lib.telemetry import send_data_lines
 
-from common import Tracker
-from modbus_common import ModbusDataCollector, RegisterType
+from common.tracker import Tracker
+from common.modbus import ModbusDataCollector, RegisterType
 
 
 TRACKERS = [

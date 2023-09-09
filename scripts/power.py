@@ -10,7 +10,7 @@ from lib import log
 from lib.telemetry import send_data_lines
 from lib.quicklock import lock
 
-from common import Tracker
+from common.tracker import Tracker
 
 
 TRACKERS = [

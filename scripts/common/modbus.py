@@ -22,6 +22,7 @@ class RegisterType(object):
             return value
 
     S16 = _RegisterType(1, '16bit_int', nan_value=0x8000)
+    S16_F2 = _RegisterType(1, '16bit_int', fix=2, nan_value=0x8000)
     S32 = _RegisterType(2, '32bit_int', nan_value=0x80000000)
     S32_F1 = _RegisterType(2, '32bit_int', fix=1, nan_value=0x80000000)
     S32_F2 = _RegisterType(2, '32bit_int', fix=2, nan_value=0x80000000)

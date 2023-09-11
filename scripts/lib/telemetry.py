@@ -73,3 +73,14 @@ def pressure_converter(sea_pressure, temp, altitude):
     # https://keisan.casio.com/exec/system/1224575267
     p = sea_pressure / math.pow(1 - 0.0065 * altitude / (temp + 0.0065 * altitude + 273.15), -5.257)
     return round(p)
+
+
+def query_series_last_value(db, metric, window="10m", default=None):
+    result = query_data(
+        db,
+        'SELECT LAST("value") '
+        'FROM "%s" '
+        'WHERE time >= now() - %s ' % (metric, window))
+    if not result:
+        return None
+    return next(result[0][1])['last']

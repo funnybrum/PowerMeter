@@ -18,7 +18,8 @@ PV inverter. When there is often energy load on the system the impact is that th
 
 from signal import signal, SIGINT, SIGTERM
 
-from lib import config
+from lib import config, log
+from lib.quicklock import lock
 
 from common.threading import ThreadManager
 from optimizer.sunnyboy import SunnyBoyModbusCollector
@@ -56,6 +57,12 @@ def handle_kill_signal(sig, frame):
 
 
 if __name__ == "__main__":
+    try:
+        lock()
+    except RuntimeError:
+        exit(0)
+    log("Starting charge optimizer")
+
     signal(SIGINT, handle_kill_signal)
     signal(SIGTERM, handle_kill_signal)
 

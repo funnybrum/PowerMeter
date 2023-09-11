@@ -47,7 +47,7 @@ class DataProcessor(LoopingThread):
         else:
             load_volatility = 999
 
-        if load_volatility < 100:
+        if load_volatility < 200:
             target = round(0.95 * data['max_pv_output'] - load)
             target = round(target)
             target = min(target, 3300)

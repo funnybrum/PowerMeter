@@ -29,6 +29,11 @@ class TelemetrySender(LoopingThread):
         lines = []
         processed_keys = []
         for key, value in self._data.items():
+            if key == "load_volatility":
+                if value  > 200:
+                    self._loop_interval = 0.2
+                else:
+                    self._loop_interval = 10
             if key in MAPPING:
                 lines.append(to_data_line(MAPPING[key], value, {}))
             processed_keys.append(key)

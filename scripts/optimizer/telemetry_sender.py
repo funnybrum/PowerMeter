@@ -30,7 +30,7 @@ class TelemetrySender(LoopingThread):
         processed_keys = []
         for key, value in self._data.items():
             if key == "load_volatility":
-                if value  > 200:
+                if value > 200:
                     self._loop_interval = 0.2
                 else:
                     self._loop_interval = 10

@@ -66,10 +66,10 @@ class ThreadManager(LoopingThread):
         self._check_threads_are_alive_callback = None
 
     def begin(self):
-        log("Starting")
+        log("Starting thread manager")
 
     def end(self):
-        log("Stopping")
+        log("Stopping thread manager")
 
     def loop(self):
         # In some cases we may run the thread manager instead of starting it. Check if th == self too.

@@ -52,7 +52,7 @@ class DataProcessor(LoopingThread):
         while len(self._dv_history) > self._dv_history_size:
             self._dv_history.pop(0)
 
-        mppt_dv_min = min(self._dv_history)
+        mppt_dv_min = max(self._dv_history)
 
         target = round(0.95 * data['max_pv_output'] - load)
         target = round(target)

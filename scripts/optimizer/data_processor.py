@@ -35,13 +35,15 @@ class DataProcessor(LoopingThread):
 
         return data
 
-    def calc_load(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=3, post_filter_sample_count=5):
+    def _calc_load(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=1, post_filter_sample_count=5):
         load_samples = []
         for i in reversed(range(0, len(self._load_history))):
             min_value = min(self._load_history[max(0, i-pre_filter_sample_count):i+post_filter_sample_count])
             if min_value > filter_threshold:
                 load_samples.append(self._load_history[i])
-            
+            if len(load_samples) >= sample_count:
+                break
+
         if not load_samples:
             return 0
 
@@ -54,6 +56,9 @@ class DataProcessor(LoopingThread):
         while len(self._load_history) > self._load_history_size:
             self._load_history.pop(0)
 
+        # Refine the load by averaging the last several load samples
+        load = self._calc_load()
+
         if len(self._load_history) > self._load_history_size * 0.9:
             load_volatility = max(self._load_history) - min(self._load_history)
         else:
@@ -64,12 +69,10 @@ class DataProcessor(LoopingThread):
         while len(self._dv_history) > self._dv_history_size:
             self._dv_history.pop(0)
 
-        if len(mppt_dv) > self._dv_history_size * 0.9:
+        if len(self._dv_history) > self._dv_history_size * 0.9:
             mppt_dv_max = max(self._dv_history)
         else:
             mppt_dv_max = 0
-
-        load = self.calc_load()
 
         target = round(0.95 * data['max_pv_output'] - load)
         target = round(target)

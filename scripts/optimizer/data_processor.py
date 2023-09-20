@@ -14,7 +14,7 @@ class DataProcessor(LoopingThread):
         self._load_history = []
         self._load_history_size = 30
         self._dv_history = []
-        self._dv_history_size = 30
+        self._dv_history_size = 90
 
     def _aggregate_data(self):
         collectors = [self._thread_manager.get_thread(c) for c in [
@@ -52,7 +52,10 @@ class DataProcessor(LoopingThread):
         while len(self._dv_history) > self._dv_history_size:
             self._dv_history.pop(0)
 
-        mppt_dv_min = max(self._dv_history)
+        if len(mppt_dv) > self._dv_history_size * 0.9:
+            mppt_dv_max = max(self._dv_history)
+        else:
+            mppt_dv_max = 0
 
         target = round(0.95 * data['max_pv_output'] - load)
         target = round(target)
@@ -63,7 +66,7 @@ class DataProcessor(LoopingThread):
         if data['max_pv_output'] > 500 and \
                 data['pv_supply'] < min(data['max_pv_output'] * 0.95, data['max_pv_output']-200) and \
                 data['bat.SOC'] < 95 and \
-                mppt_dv_min < 4 and \
+                mppt_dv_max < 4 and \
                 target - data['charge'] > 300 and \
                 load_volatility < 200:
             force_charging = 1

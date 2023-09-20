@@ -35,6 +35,18 @@ class DataProcessor(LoopingThread):
 
         return data
 
+    def calc_load(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=1, post_filter_sample_count=5):
+        load_samples = []
+        for i in reversed(range(0, len(self._load_history))):
+            min_value = min(self._load_history[max(0, i-pre_filter_sample_count):i+post_filter_sample_count])
+            if min_value > filter_threshold:
+                load_samples.append(self._load_history[i])
+            
+        if not load_samples:
+            return 0
+
+        return round(sum(load_samples) / len(load_samples))
+
     def _enrich_data(self, data):
         load = round(data["grid_consume"] - data["grid_supply"] + data["pv_supply"] - data["charge"] + data["discharge"])
 
@@ -53,6 +65,8 @@ class DataProcessor(LoopingThread):
             self._dv_history.pop(0)
 
         mppt_dv_min = max(self._dv_history)
+
+        load = self.calc_load()
 
         target = round(0.95 * data['max_pv_output'] - load)
         target = round(target)

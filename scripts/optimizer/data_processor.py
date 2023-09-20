@@ -35,7 +35,7 @@ class DataProcessor(LoopingThread):
 
         return data
 
-    def calc_load(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=1, post_filter_sample_count=5):
+    def calc_load(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=3, post_filter_sample_count=5):
         load_samples = []
         for i in reversed(range(0, len(self._load_history))):
             min_value = min(self._load_history[max(0, i-pre_filter_sample_count):i+post_filter_sample_count])

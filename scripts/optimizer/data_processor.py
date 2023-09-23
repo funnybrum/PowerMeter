@@ -6,6 +6,7 @@ from optimizer.homemanager import HomeManagerCollector
 from optimizer.telemetry_collector import TelemetryCollector
 from optimizer.telemetry_sender import TelemetrySender
 
+# from lib import log
 
 class DataProcessor(LoopingThread):
     def __init__(self, thread_manager):
@@ -35,7 +36,7 @@ class DataProcessor(LoopingThread):
 
         return data
 
-    def _calc_load(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=1, post_filter_sample_count=5):
+    def _calc_load_avg(self, sample_count=10, filter_threshold=0, pre_filter_sample_count=1, post_filter_sample_count=5):
         load_samples = []
         for i in reversed(range(0, len(self._load_history))):
             min_value = min(self._load_history[max(0, i-pre_filter_sample_count):i+post_filter_sample_count])
@@ -57,7 +58,7 @@ class DataProcessor(LoopingThread):
             self._load_history.pop(0)
 
         # Refine the load by averaging the last several load samples
-        load = self._calc_load()
+        load_avg = self._calc_load_avg()
 
         if len(self._load_history) > self._load_history_size * 0.9:
             load_volatility = max(self._load_history) - min(self._load_history)
@@ -74,7 +75,7 @@ class DataProcessor(LoopingThread):
         else:
             mppt_dv_max = 0
 
-        target = round(0.95 * data['max_pv_output'] - load)
+        target = round(0.95 * data['max_pv_output'] - load_avg)
         target = round(target)
         target = min(target, 3300)
         target = max(target, 0)
@@ -90,6 +91,7 @@ class DataProcessor(LoopingThread):
 
         data.update({
             'load': load,
+            'load_avg': load_avg,
             'load_volatility': load_volatility,
             'target': target,
             'force_charging': force_charging
@@ -102,5 +104,6 @@ class DataProcessor(LoopingThread):
             return
 
         self._enrich_data(data)
+        # log(data)
 
         self._thread_manager.get_thread(TelemetrySender).set_data(data)

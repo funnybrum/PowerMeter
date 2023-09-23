@@ -12,7 +12,8 @@ MAPPING = {
     "target": "inverter.consume.target",
     "load": "system.load",
     "load_volatility": "system.load.volatility",
-    "force_charging": "force_charging"
+    "force_charging": "force_charging",
+    "load_avg: ": "system.load.avg",
 }
 
 

@@ -42,8 +42,8 @@ class TelemetrySender(LoopingThread):
         for key in processed_keys:
             del self._data[key]
 
-        # if len(lines) > 0:
-        #     send_data_lines(self._db, lines)
+        if len(lines) > 0:
+            send_data_lines(self._db, lines)
 
     def end(self):
         log("Stopping telemetry sender")

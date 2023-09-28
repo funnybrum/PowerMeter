@@ -6,7 +6,7 @@ from common.speedwire import get_speedwire_socket, decode_speedwire
 
 class HomeManagerCollector(LoopingDataCollector):
     def __init__(self):
-        LoopingDataCollector.__init__(self, expected_items_count=2, loop_interval=1)
+        LoopingDataCollector.__init__(self, expected_items_count=2, loop_interval=0.1)
         self._sw_socket = None
 
     def begin(self):

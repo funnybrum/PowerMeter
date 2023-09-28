@@ -14,6 +14,8 @@ MAPPING = {
     "load_volatility": "system.load.volatility",
     "force_charging": "force_charging",
     "load_avg": "system.load.avg",
+    "DCV1": "mppt1.voltage",
+    "DCV2": "mppt2.voltage"
 }
 
 

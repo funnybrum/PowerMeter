@@ -6,7 +6,7 @@ from optimizer.homemanager import HomeManagerCollector
 from optimizer.telemetry_collector import TelemetryCollector
 from optimizer.telemetry_sender import TelemetrySender
 
-from lib import log
+# from lib import log
 
 class DataProcessor(LoopingThread):
     def __init__(self, thread_manager):
@@ -90,6 +90,6 @@ class DataProcessor(LoopingThread):
             return
 
         self._enrich_data(data)
-        log(data)
+        # log(data)
 
         self._thread_manager.get_thread(TelemetrySender).set_data(data)

@@ -56,8 +56,8 @@ class DataProcessor(LoopingThread):
             self._dv_history.pop(0)
 
         if len(self._dv_history) > self._dv_history_size * 0.9:
-            # Get p5 for the voltage difference.
-            mppt_dv_min = sorted(self._dv_history)[round(len(self._dv_history) * 0.05)]
+            # Get p95 for the voltage difference. Or almost the max differences.
+            mppt_dv_min = sorted(self._dv_history)[round(len(self._dv_history) * 0.95)]
         else:
             mppt_dv_min = 0
 

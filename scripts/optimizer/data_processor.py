@@ -14,6 +14,8 @@ class DataProcessor(LoopingThread):
         self._thread_manager = thread_manager
         self._load_history = []
         self._load_history_size = 10
+        self._base_load_history = []
+        self._base_load_history_size = 300
         self._dv_history = []
         self._dv_history_size = 120
 
@@ -43,7 +45,16 @@ class DataProcessor(LoopingThread):
         while len(self._load_history) > self._load_history_size:
             self._load_history.pop(0)
 
+        self._base_load_history.append(load)
+        while len(self._base_load_history) > self._base_load_history_size:
+            self._base_load_history.pop(0)
+
         load_avg = round(sum(self._load_history)/len(self._load_history))
+
+        base_load = load
+        if len(self._base_load_history) > self._base_load_history_size * 0.9:
+            base_load_data = sorted(self._base_load_history)[60:180]
+            base_load = sum(base_load_data) / len(base_load_data)
 
         if len(self._load_history) > self._load_history_size * 0.9:
             load_volatility = max(self._load_history) - min(self._load_history)
@@ -79,6 +90,7 @@ class DataProcessor(LoopingThread):
             'load': load,
             'load_avg': load_avg,
             'load_volatility': load_volatility,
+            'base_load': base_load,
             'target': target,
             'force_charging': force_charging
         })

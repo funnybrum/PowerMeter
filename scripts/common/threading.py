@@ -6,15 +6,20 @@ from lib import log
 
 
 class LoopingThread(Thread):
-    def __init__(self, loop_interval=1):
+    def __init__(self, loop_interval=1, align_to_round_minute=False):
         Thread.__init__(self)
         self._running = True
         self._loop_interval = loop_interval
+        self.align_to_round_minute = align_to_round_minute
 
     def run(self):
         try:
             self.begin()
             start = time()
+            if self.align_to_round_minute:
+                start = round(time())
+                while start % self._loop_interval != 0:
+                    start -= 1
             while self._running:
                 self.loop()
                 while self._running and time() < start + self._loop_interval:

@@ -5,12 +5,15 @@ from common.threading import LoopingDataCollector
 
 class SunnyIslandModbusCollector(LoopingDataCollector):
     def __init__(self, ip_addr):
-        LoopingDataCollector.__init__(self, expected_items_count=3, loop_interval=1)
+        LoopingDataCollector.__init__(self, expected_items_count=6, loop_interval=1)
         self._ip_addr = ip_addr
         self._collector = ModbusDataCollector([
-            (30845, RegisterType.U32, 'bat.SOC'),
-            (31393, RegisterType.U32, 'charge'),
-            (31395, RegisterType.U32, 'discharge'),
+            (30845, RegisterType.U32, 'bat_inv.SOC'),
+            (31393, RegisterType.U32, 'bat_inv.consume'),
+            (31395, RegisterType.U32, 'bat_inv.supply'),
+            (31397, RegisterType.U64, 'bat_inv.consume_total'),
+            (31401, RegisterType.U64, 'bat_inv.supply_total'),
+            (30247, RegisterType.U32, 'bat_inv.event_code'),
         ])
 
     def begin(self):

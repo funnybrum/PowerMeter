@@ -1,5 +1,5 @@
 extend: base.yaml
 
-identifier: charge_optimizer
+identifier: power_meter
 pv_inv_addr: 192.168.1.211
 bat_inv_addr: 192.168.1.212

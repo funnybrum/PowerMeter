@@ -1,6 +1,2 @@
-*/1 * * * * /scripts/power.sh > /proc/1/fd/1 2>/proc/1/fd/2
-*/1 * * * * /scripts/pv_inverter.sh > /proc/1/fd/1 2>/proc/1/fd/2
-*/1 * * * * /scripts/bat_inverter.sh > /proc/1/fd/1 2>/proc/1/fd/2
 */1 * * * * /scripts/sun_calc.sh > /proc/1/fd/1 2>/proc/1/fd/2
-*/1 * * * * /scripts/postprocessor.sh > /proc/1/fd/1 2>/proc/1/fd/2
-*/1 * * * * /scripts/charge_optimizer.sh > /proc/1/fd/1 2>/proc/1/fd/2
+*/1 * * * * /scripts/power_meter.sh > /proc/1/fd/1 2>/proc/1/fd/2

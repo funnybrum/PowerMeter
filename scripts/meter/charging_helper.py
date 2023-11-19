@@ -1,6 +1,12 @@
 import os
 if 'APP_CONFIG' not in os.environ:
-    os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/bat_inverter.yaml'
+    os.environ['APP_CONFIG'] = '/brum/dev/PowerMeter/scripts/config/power_meter.yaml'
+
+
+"""
+Frozen for now. This may be resurrected in the future for improving the system recovery after grid supply spike.
+"""
+
 
 from threading import Thread
 

@@ -27,19 +27,19 @@ class Tracker(object):
         self.min = min(self.min, self.last)
         self.avg.append(self.last)
 
-    def get_data_lines(self):
+    def get_data_lines(self, timestamp=None):
         data_lines = []
 
         if self.track_min:
-            data_lines.append(to_data_line(self.metric_key + ".min", self.min, self.tags))
+            data_lines.append(to_data_line(self.metric_key + ".min", self.min, self.tags, timestamp))
         if self.track_max:
-            data_lines.append(to_data_line(self.metric_key + ".max", self.max, self.tags))
+            data_lines.append(to_data_line(self.metric_key + ".max", self.max, self.tags, timestamp))
         if self.track_avg:
-            data_lines.append(to_data_line(self.metric_key + ".avg", round(sum(self.avg) / len(self.avg), 1), self.tags))
+            data_lines.append(to_data_line(self.metric_key + ".avg", round(sum(self.avg) / len(self.avg), 1), self.tags, timestamp))
         if self.track_last:
-            data_lines.append(to_data_line(self.metric_key, self.last, self.tags))
+            data_lines.append(to_data_line(self.metric_key, self.last, self.tags, timestamp))
         if self.track_point_count:
-            data_lines.append(to_data_line(self.metric_key + ".data_points", len(self.avg), self.tags))
+            data_lines.append(to_data_line(self.metric_key + ".data_points", len(self.avg), self.tags, timestamp))
 
         return data_lines
 

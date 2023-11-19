@@ -1,4 +1,0 @@
-extend: base.yaml
-
-identifier: bat_inverter
-address: 192.168.1.212

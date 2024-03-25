@@ -2,6 +2,7 @@ from pymodbus.client import ModbusTcpClient
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 
+from lib import log
 
 class RegisterType(object):
     class _RegisterType(object):
@@ -39,23 +40,31 @@ class ModbusDataCollector(object):
         self.client = None
         self.slave = None
         self.registers = registers
-        self.errors = 0
-        self.success = 0
-
-    def reset(self):
-        super().reset()
-        self.errors = 0
-        self.success = 0
+        self._successive_error_count = 0
+        self._host = None
 
     def connect(self, host, port, slave):
+        self._host = host
         self.slave = slave
         self.client = ModbusTcpClient(host, port)
         self.client.connect()
 
     def read(self):
         result = {}
-        for address, reg_type, key in self.registers:
-            regs_l = self.client.read_holding_registers(address=address, count=reg_type.count, slave=self.slave)
-            result[key] = reg_type.read(regs_l)
+        try:
+            for address, reg_type, key in self.registers:
+                regs_l = self.client.read_holding_registers(address=address, count=reg_type.count, slave=self.slave)
+                result[key] = reg_type.read(regs_l)
+        except Exception as e:
+            self._successive_error_count += 1
+            if self._successive_error_count > 120:
 
+                self.client.close()
+                self.client.connect()
+                self._successive_error_count = 0
+
+            for _, _, key in self.registers:
+                result[key] = 0
+
+            log(f"Error reading modbus data from {self._host} for register {address}: {e}")
         return result

@@ -13,6 +13,7 @@ class DataProcessor(LoopingThread):
     def __init__(self, thread_manager):
         LoopingThread.__init__(self, loop_interval=0.25)
         self._thread_manager = thread_manager
+        self._last_good_data = None
 
     def _aggregate_data(self):
         collectors = [self._thread_manager.get_thread(c) for c in [
@@ -33,12 +34,36 @@ class DataProcessor(LoopingThread):
 
         return data
 
+    def _verify_and_fallback(self, key, data):
+        if key not in data or data[key] is None or data[key] < 100:
+            log(f"Detected invalid entry for {key} in {data}")
+            if self._last_good_data:
+                log(f"Using last good data entry for {key} with value {self._last_good_data[key]}")
+                data[key] = self._last_good_data[key]
+            else:
+                return False
+
+        return True
+
     def _enrich_data(self, data):
         """
         This method contained code for calculating if there is underutilization of the PV inverter. This is now part of
         the git history. The code was modified to replace the 3 different data collecting and the energy data post
         processing scripts
         """
+
+        # Sanity checks on data quality. In some cases part of the data are missing. Attempt to backfill it with the
+        # last good data points. If this fails - skip generating the enriched data points
+        if not self._verify_and_fallback("hm.grid_supply_counter", data):
+            return
+        if not self._verify_and_fallback("pv_inv.supply_total", data):
+            return
+        if not self._verify_and_fallback("bat_inv.supply_total", data):
+            return
+        if not self._verify_and_fallback("bat_inv.consume_total", data):
+            return
+
+        self._last_good_data.update(data)
 
         own_consumption_total = round(0
                                       - data["hm.grid_supply_counter"]

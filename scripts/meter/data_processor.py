@@ -13,7 +13,7 @@ class DataProcessor(LoopingThread):
     def __init__(self, thread_manager):
         LoopingThread.__init__(self, loop_interval=0.25)
         self._thread_manager = thread_manager
-        self._last_good_data = None
+        self._last_good_data = {}
 
     def _aggregate_data(self):
         collectors = [self._thread_manager.get_thread(c) for c in [

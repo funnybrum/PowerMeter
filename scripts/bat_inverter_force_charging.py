@@ -1,7 +1,3 @@
-"""
-Example script for forcing the battery inverter to charge.
-"""
-
 import time
 
 from datetime import datetime
@@ -38,10 +34,10 @@ if __name__ == "__main__":
     getClient()
 
     setAddr(40151, 802, "uint32")
-    while now.hour < 6 or now.hour >= 20:
+    while now.hour < 6 or now.hour >= 22:
         now = datetime.now()
         print("Executing %s" % datetime.now())
-        setAddr(40149, -2500, "int32")
+        setAddr(40149, -1500, "int32")
         time.sleep(3)
 
     setAddr(40151, 803, "uint32")

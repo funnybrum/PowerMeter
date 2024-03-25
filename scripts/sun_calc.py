@@ -44,21 +44,24 @@ def calculate(month, day, hour, minute):
     times = [60 * i + 10 for i in range(-INTERPOLATION_POINTS_AROUND, INTERPOLATION_POINTS_AROUND + 1)]
     target_y = minute
 
-    powers = [MAX_POWER[i] for i in range(dates_index - INTERPOLATION_POINTS_AROUND, dates_index + INTERPOLATION_POINTS_AROUND + 1)]
+    try:
+        powers = [MAX_POWER[i] for i in range(dates_index - INTERPOLATION_POINTS_AROUND, dates_index + INTERPOLATION_POINTS_AROUND + 1)]
 
-    # drop zero points, they should not be part of the spline.
-    drop_from_start = count_zeroes_at_start(powers)
-    drop_from_end = count_zeroes_at_start(list(reversed(powers)))
+        # drop zero points, they should not be part of the spline.
+        drop_from_start = count_zeroes_at_start(powers)
+        drop_from_end = count_zeroes_at_start(list(reversed(powers)))
 
-    powers = powers[drop_from_start:-drop_from_end if drop_from_end > 0 else None]
-    times = times[drop_from_start:-drop_from_end if drop_from_end > 0 else None]
+        powers = powers[drop_from_start:-drop_from_end if drop_from_end > 0 else None]
+        times = times[drop_from_start:-drop_from_end if drop_from_end > 0 else None]
 
-    if len(powers) > 3:
-        # Go with the spline
-        cs = CubicSpline(times, powers)
+        if len(powers) > 3:
+            # Go with the spline
+            cs = CubicSpline(times, powers)
 
-        max_sun_power = max(0, int(cs(target_y)))
-    else:
+            max_sun_power = max(0, int(cs(target_y)))
+        else:
+            max_sun_power = 0
+    except:
         max_sun_power = 0
 
     send_data("power",

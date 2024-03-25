@@ -19,7 +19,7 @@ from common.threading import ThreadManager
 from meter.sunnyboy import SunnyBoyModbusCollector
 from meter.sunnyisland import SunnyIslandModbusCollector
 from meter.homemanager import HomeManagerCollector
-from meter.telemetry_collector import TelemetryCollector
+from meter.data_collector import DataCollector
 from meter.telemetry_sender import TelemetrySender
 from meter.data_processor import DataProcessor
 
@@ -36,8 +36,8 @@ def checker(thread_manager):
     if not manager.get_thread(SunnyBoyModbusCollector):
         manager.add_and_run(SunnyBoyModbusCollector(ip_addr=config["pv_inv_addr"]))
 
-    if not manager.get_thread(TelemetryCollector):
-        manager.add_and_run(TelemetryCollector())
+    if not manager.get_thread(DataCollector):
+        manager.add_and_run(DataCollector())
 
     if not manager.get_thread(TelemetrySender):
         manager.add_and_run(TelemetrySender())

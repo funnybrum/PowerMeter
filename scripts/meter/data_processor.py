@@ -3,7 +3,7 @@ from common.threading import LoopingThread
 from meter.sunnyboy import SunnyBoyModbusCollector
 from meter.sunnyisland import SunnyIslandModbusCollector
 from meter.homemanager import HomeManagerCollector
-from meter.telemetry_collector import TelemetryCollector
+from meter.data_collector import DataCollector
 from meter.telemetry_sender import TelemetrySender
 
 from lib import log
@@ -19,7 +19,7 @@ class DataProcessor(LoopingThread):
             HomeManagerCollector,
             SunnyBoyModbusCollector,
             SunnyIslandModbusCollector,
-            TelemetryCollector
+            DataCollector
         ]]
 
         for collector in collectors:

@@ -7,7 +7,7 @@ DATA_COLLECTION = {
 }
 
 
-class TelemetryCollector(LoopingDataCollector):
+class DataCollector(LoopingDataCollector):
     def __init__(self):
         LoopingDataCollector.__init__(self, expected_items_count=1, loop_interval=60)
 

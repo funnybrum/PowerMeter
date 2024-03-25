@@ -46,6 +46,7 @@ TRACKERS = [
     Tracker('bat_inv.consume_total', 'inverter.battery.consume.total', {"source": "sunny_island", "src": "sma"}, False, False, False, True),
     Tracker('bat_inv.SOC', 'inverter.battery.SOC', {"source": "sunny_island", "src": "sma"}, False, False, False, True),
     Tracker('bat_inv.event_code', 'inverter.battery.status', {"source": "sunny_island", "src": "sma"}, False, False, False, True),
+    Tracker('bat_inv.power_status', 'inverter.battery.power_status', {"source": "sunny_island", "src": "sma"}, False, False, False, True),
     # Calculated data trackers
     Tracker('own_consumption', 'pv.consume.flow', {"source": "master_mind", "src": "sma"}, True, True, True, False, True),
     Tracker('own_consumption_total', 'pv.consume.total', {"source": "master_mind", "src": "sma"}, False, False, False, True),

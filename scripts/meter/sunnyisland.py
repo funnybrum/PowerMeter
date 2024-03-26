@@ -14,7 +14,8 @@ class SunnyIslandModbusCollector(LoopingDataCollector):
             (31397, RegisterType.U64, 'bat_inv.consume_total'),
             (31401, RegisterType.U64, 'bat_inv.supply_total'),
             (30247, RegisterType.U32, 'bat_inv.event_code'),
-            (30915, RegisterType.U32, 'bat_inv.power_status'),
+            (33003, RegisterType.U32, 'bat_inv.op_mode'),
+            (30883, RegisterType.U32, 'bat_inv.grid_status'),
         ])
 
     def begin(self):

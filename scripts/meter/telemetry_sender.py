@@ -71,9 +71,10 @@ class TelemetrySender(LoopingThread):
             point_date = datetime.now().replace(second=0, microsecond=0)
             point_date = round(point_date.timestamp())
             for tracker in TRACKERS:
-                lines.extend(tracker.get_data_lines(timestamp=point_date))
-                tracker.reset()
-                send_data_lines(self._db, lines)
+                if tracker.get_points_count() > 0:
+                    lines.extend(tracker.get_data_lines(timestamp=point_date))
+                    tracker.reset()
+            send_data_lines(self._db, lines)
 
         if self._data:
             for tracker in TRACKERS:
